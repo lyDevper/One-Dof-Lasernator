@@ -77,6 +77,7 @@ void setup() {
   digitalWrite(enPin, LOW);
   digitalWrite(stepPin, 0);
 
+  Serial.println("Hello");
   //testStepper();
 }
 
@@ -92,9 +93,10 @@ void testStepper() {
 }
 
 float inpDeg;
-
 void loop() {
+  /*
   // program to interface the user and call rotateToDeg() to rotate according to the desired input
+  Serial.println("Please enter deg : ");
   while (!Serial.available() > 0) {
     delay(100);  //Wait for user input
     //Serial.println(Serial.available()); >> 0
@@ -104,4 +106,30 @@ void loop() {
   rotateToDeg(inpDeg, delay_tlr);
   beamLaser(1500);
   //still has bouncing error
+  */
+  app();
 }
+
+void waitForSerialInp() {
+  while (!Serial.available() > 0) {
+    delay(100);  //Wait for user input
+    // don't forget to select "No Line Ending" in Serial Monitor!!!
+  }
+  return;
+}
+/*
+void app() {  // to be called in void loop()
+  Serial.println("Please enter the command. The existing commands are :");
+  Serial.println("todeg <float>");
+  waitForSerialInp();
+  String cmd = Serial.readStringUntil('\n');
+
+  if (cmd == "todeg") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    float para = Serial.parseFloat();
+    // do something
+  }
+  else if
+}
+*/
