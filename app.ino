@@ -12,7 +12,7 @@ void app() {  // To be called in void loop()
   Serial.println("\tbydeg <float> or bd <float>");
   Serial.println("\ttostep <int> or ts <int>");
   Serial.println("\tbystep <int> or bs <int>");
-  Serial.println("\tohole <int> or th <int>");
+  Serial.println("\ttohole <int> or th <int>");
   Serial.println("\tbyhole <int> or bh <int>");
   Serial.println("\tsetdeg <float> or sd <float>");
   Serial.println("\tsetstep <int> or ss <int>");
@@ -35,61 +35,61 @@ void app() {  // To be called in void loop()
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     float para = Serial.parseFloat();
-    // Handle the bydeg command with 'para' value
+    rotateByDeg(para, delay_tlr);
   }
   else if (cmd == "tostep" || cmd == "ts") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();
-    // Handle the tostep command with 'para' value
+    stepTo(para, delay_tlr);
   }
   else if (cmd == "bystep" || cmd == "bs") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();
-    // Handle the bystep command with 'para' value
+    stepBy(para, delay_tlr);
   }
   else if (cmd == "tohole" || cmd == "th") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();
-    // Handle the tohole command with 'para' value
+    rotateToHole(para, delay_tlr);
   }
   else if (cmd == "byhole" || cmd == "bh") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();
-    // Handle the byhole command with 'para' value
+    rotateByHole(para, delay_tlr);
   }
   else if (cmd == "setdeg" || cmd == "sd") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     float para = Serial.parseFloat();
-    // Handle the setdeg command with 'para' value
+    setDegNow(para);
   }
   else if (cmd == "setstep" || cmd == "ss") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();
-    // Handle the setstep command with 'para' value
+    setStepNow(para);
   }
   else if (cmd == "homezero" || cmd == "hz") {
-    // Handle the homezero command
+    homeToZero();
   }
   else if (cmd == "tolimsw" || cmd == "tl") {
-    // Handle the tolimsw command
+    rotateToLimSw();
   }
   else if (cmd == "laseron" || cmd == "ln") {
-    // Handle the laseron command
+    laserOn();
   }
   else if (cmd == "laseroff" || cmd == "lf") {
-    // Handle the laseroff command
+    laserOff();
   }
   else if (cmd == "beam" || cmd == "bm") {
-    // Handle the beam command
+    beamLaser(1500);
   }
   else {
     Serial.println("Invalid command");
   }
-  Serial.println();  
+  Serial.println();
 }

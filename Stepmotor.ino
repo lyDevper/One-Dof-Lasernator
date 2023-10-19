@@ -6,8 +6,25 @@ const int limSwPin = 5;  // change for limit switch pin
 const int laserPin = 6;
 
 const float stepAng = 0.225;  // angle per step after considering gearing
-int stepNow = 0;              // keep tracking current absoute position in steps
+const float angPerHole = 5;
+float degAtLim = -3; // deg position at limit switch for offsetting to 0 deg, must be calibrated
 
+int stepNow = 0; // keep tracking current absoute position in steps
+//float idealDegNow = 0; // tracking expected angle deg
+
+void setStepNow(int stepNow_) {
+  stepNow = stepNow_;  
+}
+
+void setDegNow(int degPos) {
+  stepNow = round(degPos / stepAng);
+}
+
+float getDegNow() {
+  return stepNow * stepAng;
+}
+
+//----------------------------------------------------------------------------------//
 void stepBy(int steps, int tlr) {  // rotate by a number of steps
   if (steps > 0)
     digitalWrite(dirPin, 1);
@@ -29,32 +46,52 @@ void stepTo(int stepPos, int tlr) {  // rotate to an absolute position specified
 }
 
 void rotateToDeg(float degPos, int tlr) {  // rotate to an absolute position in deg
+  Serial.print("Rotating to deg: ");
+  Serial.println(degPos);
+
   int stepPos = round(degPos / stepAng);
   stepTo(stepPos, tlr);
 
-  Serial.print("Rotates to  steps: ");
+  Serial.print("Rotated to steps: ");
   Serial.print(stepNow);
   Serial.print(" deg: ");
   Serial.println(getDegNow());
 }
 
-void setStepNow(int stepNow_) {
-  stepNow = stepNow_;
-}
-void setDegNow(int degPos) {
-  stepNow = round(degPos / stepAng);
-}
-float getDegNow() {
-  return stepNow * stepAng;
+void rotateByDeg(float deg, int tlr) {
+  rotateToDeg(getDegNow() + deg, tlr);
 }
 
-void homePosition() {
+void rotateToHole(int hole, int tlr) {
+  rotateToDeg(hole*angPerHole, tlr);
+}
+
+void rotateByHole(int hole, int tlr) {
+  rotateByDeg(hole*angPerHole, tlr);
+}
+
+//--------------------------------------------------------------//
+void rotateToLimSw() {
   while (true) {
-    stepBy(1, 5000);  // by 1 or -1
+    stepBy(-1, 8000);  // by 1 or -1
     if (digitalRead(limSwPin))
       break;
   }
-  setDegNow(0);  // set as a desired number of deg
+}
+
+void homeToZero() {
+  rotateToLimSw();
+  setDegNow(degAtLim);
+  rotateToDeg(0, 8000); // to position of 0 deg at 0th hole
+  setDegNow(0);
+}
+
+void laserOn() {
+  digitalWrite(laserPin, 1);
+}
+
+void laserOff() {
+  digitalWrite(laserPin, 0);
 }
 
 void beamLaser(int duration) {
@@ -77,8 +114,12 @@ void setup() {
   digitalWrite(enPin, LOW);
   digitalWrite(stepPin, 0);
 
-  Serial.println("setup started");
+  Serial.println("setup started beep beep...");
   //testStepper();
+}
+
+void loop() {
+  app();
 }
 
 void testStepper() {
@@ -92,9 +133,7 @@ void testStepper() {
   delay(1000);
 }
 
-float inpDeg;
-void loop() {
-  /*
+void app0() { //spare but not used now
   // program to interface the user and call rotateToDeg() to rotate according to the desired input
   Serial.println("Please enter deg : ");
   while (!Serial.available() > 0) {
@@ -102,11 +141,8 @@ void loop() {
     //Serial.println(Serial.available()); >> 0
     // don't forget to select "No Line Ending" in Serial Monitor!!!
   }
-  inpDeg = Serial.parseFloat();  //Read user input and hold it in a variable
+  float inpDeg = Serial.parseFloat();  //Read user input and hold it in a variable
   rotateToDeg(inpDeg, delay_tlr);
   beamLaser(1500);
-  //still has bouncing error
-  */
-  app();
 }
 
