@@ -73,9 +73,9 @@ void rotateByHole(int hole, int tlr) {
 //--------------------------------------------------------------//
 void rotateToLimSw() {
   while (true) {
-    stepBy(-1, 8000);  // by 1 or -1
     if (digitalRead(limSwPin))
       break;
+    stepBy(-1, 8000);  // by 1 or -1
   }
 }
 
