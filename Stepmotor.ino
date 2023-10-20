@@ -7,7 +7,7 @@ const int laserPin = 6;
 
 const float stepAng = 0.225;  // angle per step after considering gearing
 const float angPerHole = 5;
-float degAtLim = -3; // deg position at limit switch for offsetting to 0 deg, must be calibrated
+float degAtLim = -3.15; // deg position at limit switch for offsetting to 0 deg, must be calibrated
 
 int stepNow = 0; // keep tracking current absoute position in steps
 //float idealDegNow = 0; // tracking expected angle deg
@@ -16,8 +16,19 @@ void setStepNow(int stepNow_) {
   stepNow = stepNow_;  
 }
 
-void setDegNow(int degPos) {
+void setDegNow(float degPos) {
+  Serial.print("Old value | steps: ");
+  Serial.print(stepNow);
+  Serial.print(" deg: ");
+  Serial.println(getDegNow());
+
   stepNow = round(degPos / stepAng);
+
+  Serial.print("Set to new value | steps: ");
+  Serial.print(stepNow);
+  Serial.print(" deg: ");
+  Serial.println(getDegNow());
+  Serial.println();
 }
 
 float getDegNow() {
@@ -56,6 +67,7 @@ void rotateToDeg(float degPos, int tlr) {  // rotate to an absolute position in 
   Serial.print(stepNow);
   Serial.print(" deg: ");
   Serial.println(getDegNow());
+  Serial.println();
 }
 
 void rotateByDeg(float deg, int tlr) {
@@ -71,18 +83,27 @@ void rotateByHole(int hole, int tlr) {
 }
 
 //--------------------------------------------------------------//
+int homing_tlr = 8000;
+
 void rotateToLimSw() {
   while (true) {
     if (digitalRead(limSwPin))
       break;
-    stepBy(-1, 8000);  // by 1 or -1
+    stepBy(-1, homing_tlr);  // by 1 or -1
   }
 }
 
 void homeToZero() {
   rotateToLimSw();
+  delay(500);
+  rotateByDeg(5, homing_tlr); //one more time
+  delay(500);
+  rotateToLimSw();
+  delay(500);
+
   setDegNow(degAtLim);
-  rotateToDeg(0, 8000); // to position of 0 deg at 0th hole
+  delay(100);
+  rotateToDeg(0, homing_tlr); // to position of 0 deg at 0th hole
   setDegNow(0);
 }
 
@@ -102,7 +123,7 @@ void beamLaser(int duration) {
 }
 
 // ----------------------------------------------------------------------- //
-int delay_tlr = 5000;  //delay tolerance to use
+int delay_tlr = 8000;  //delay tolerance to use
 void setup() {
   Serial.begin(9600);
   pinMode(stepPin, OUTPUT);

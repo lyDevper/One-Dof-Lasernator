@@ -73,6 +73,9 @@ void app() {  // To be called in void loop()
     int para = Serial.parseInt();
     setStepNow(para);
   }
+  else if (cmd == "setzero" || cmd == "sz") {
+    setDegNow(0);
+  }
   else if (cmd == "homezero" || cmd == "hz") {
     homeToZero();
   }
