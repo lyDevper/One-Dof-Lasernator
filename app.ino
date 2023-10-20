@@ -16,6 +16,8 @@ void app() {  // To be called in void loop()
   Serial.println("\tbyhole <int> or bh <int>");
   Serial.println("\tsetdeg <float> or sd <float>");
   Serial.println("\tsetstep <int> or ss <int>");
+  Serial.println("\tsettlr <int microsec> or st <int microsec>");
+  Serial.println("\tsetzero or sz");
   Serial.println("\thomezero or hz");
   Serial.println("\ttolimsw or tl");
   Serial.println("\tlaseron or ln");
@@ -73,6 +75,12 @@ void app() {  // To be called in void loop()
     int para = Serial.parseInt();
     setStepNow(para);
   }
+  else if (cmd == "settlr" || cmd == "st") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    int para = Serial.parseInt();
+    delay_tlr = para;
+  }
   else if (cmd == "setzero" || cmd == "sz") {
     setDegNow(0);
   }
@@ -80,7 +88,7 @@ void app() {  // To be called in void loop()
     homeToZero();
   }
   else if (cmd == "tolimsw" || cmd == "tl") {
-    rotateToLimSw();
+    rotateToLimSw(homing_tlr);
   }
   else if (cmd == "laseron" || cmd == "ln") {
     laserOn();

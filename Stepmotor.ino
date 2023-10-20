@@ -7,7 +7,7 @@ const int laserPin = 6;
 
 const float stepAng = 0.225;  // angle per step after considering gearing
 const float angPerHole = 5;
-float degAtLim = -3.15; // deg position at limit switch for offsetting to 0 deg, must be calibrated
+float degAtLim = -2.7; // deg position at limit switch for offsetting to 0 deg, must be calibrated -3.15
 
 int stepNow = 0; // keep tracking current absoute position in steps
 //float idealDegNow = 0; // tracking expected angle deg
@@ -85,20 +85,20 @@ void rotateByHole(int hole, int tlr) {
 //--------------------------------------------------------------//
 int homing_tlr = 8000;
 
-void rotateToLimSw() {
+void rotateToLimSw(int tlr) {
   while (true) {
     if (digitalRead(limSwPin))
       break;
-    stepBy(-1, homing_tlr);  // by 1 or -1
+    stepBy(-1, tlr);  // by 1 or -1
   }
 }
 
 void homeToZero() {
-  rotateToLimSw();
-  delay(500);
+  rotateToLimSw(3000);
+  delay(1000);
   rotateByDeg(5, homing_tlr); //one more time
   delay(500);
-  rotateToLimSw();
+  rotateToLimSw(homing_tlr);
   delay(500);
 
   setDegNow(degAtLim);
@@ -122,6 +122,16 @@ void beamLaser(int duration) {
   delay(1000);
 }
 
+void bootLaser() {
+  // for fun
+  for(int i=0; i<25; i++) {
+    laserOff();
+    delay(100/15 * i);
+    laserOn();
+    delay(100/15 * i);
+  }
+}
+
 // ----------------------------------------------------------------------- //
 int delay_tlr = 8000;  //delay tolerance to use
 void setup() {
@@ -135,12 +145,31 @@ void setup() {
   digitalWrite(enPin, LOW);
   digitalWrite(stepPin, 0);
 
+  bootLaser();
   Serial.println("setup started beep beep...");
   //testStepper();
+  testAccPres();
 }
 
 void loop() {
   app();
+}
+
+void testAccPres() {
+  degAtLim = -3.2;
+  int pause_time = 7000;
+  delay_tlr = 8000;
+  laserOn();
+  delay(4000);
+  for(int i=0; i<25; i++) {
+    Serial.println(i);
+    homeToZero();
+    delay(2000);
+    rotateToDeg(90, delay_tlr);
+    delay(pause_time);
+    //rotateToDeg(180, delay_tlr);
+    //delay(pause_time);
+  }
 }
 
 void testStepper() {
