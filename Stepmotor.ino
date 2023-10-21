@@ -7,7 +7,10 @@ const int laserPin = 6;
 
 const float stepAng = 0.225;  // angle per step after considering gearing
 const float angPerHole = 5;
-float degAtLim = -2.7; // deg position at limit switch for offsetting to 0 deg, must be calibrated -3.15
+
+const float degAtLim_noWeight = -2.7;
+const float degAtLim_withWeight = -3.2;
+float degAtLim = degAtLim_noWeight; // deg position at limit switch for offsetting to 0 deg, must be calibrated -3.15
 
 int stepNow = 0; // keep tracking current absoute position in steps
 //float idealDegNow = 0; // tracking expected angle deg
@@ -33,6 +36,14 @@ void setDegNow(float degPos) {
 
 float getDegNow() {
   return stepNow * stepAng;
+}
+
+void printPosNow() {
+  Serial.print("Current steps: ");
+  Serial.println(stepNow);
+  Serial.print("Current deg: ");
+  Serial.println(getDegNow());
+  Serial.println();
 }
 
 //----------------------------------------------------------------------------------//
@@ -119,16 +130,17 @@ void beamLaser(int duration) {
   digitalWrite(laserPin, 1);
   delay(duration);
   digitalWrite(laserPin, 0);
-  delay(1000);
+  //delay(1000);
 }
 
 void bootLaser() {
   // for fun
-  for(int i=0; i<25; i++) {
+  int n = 20;
+  for(int i=1; i<=n; i++) {
     laserOff();
-    delay(100/15 * i);
+    delay((pow(i, 2)/pow(n, 2))*200);
     laserOn();
-    delay(100/15 * i);
+    delay((pow(i, 2)/pow(n, 2))*200);    
   }
 }
 
@@ -148,7 +160,7 @@ void setup() {
   bootLaser();
   Serial.println("setup started beep beep...");
   //testStepper();
-  testAccPres();
+  //testAccPres();
 }
 
 void loop() {
@@ -156,7 +168,7 @@ void loop() {
 }
 
 void testAccPres() {
-  degAtLim = -3.2;
+  degAtLim = degAtLim_withWeight;
   int pause_time = 7000;
   delay_tlr = 8000;
   laserOn();

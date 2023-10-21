@@ -23,6 +23,9 @@ void app() {  // To be called in void loop()
   Serial.println("\tlaseron or ln");
   Serial.println("\tlaseroff or lf");
   Serial.println("\tbeam or bm");
+  Serial.println("\twithweight or ww");
+  Serial.println("\tnoweight or nw");
+  Serial.println("\tprintpos or pp");
 
   waitForSerialInp();
   String cmd = Serial.readStringUntil('\n');
@@ -97,7 +100,16 @@ void app() {  // To be called in void loop()
     laserOff();
   }
   else if (cmd == "beam" || cmd == "bm") {
-    beamLaser(1500);
+    beamLaser(4000);
+  }
+  else if (cmd == "withweight" || cmd == "ww") {
+    degAtLim = degAtLim_withWeight;
+  }
+  else if (cmd == "noweight" || cmd == "nw") {
+    degAtLim = degAtLim_noWeight;
+  }
+  else if (cmd == "printpos" || cmd == "pp") {
+    printPosNow();
   }
   else {
     Serial.println("Invalid command");
