@@ -60,3 +60,11 @@ void ease_rotateToDeg(float degPos, int min_tlr) {  // rotate to an absolute pos
 void ease_rotateByDeg(float deg, int min_tlr) {
   ease_rotateToDeg(getDegNow() + deg, min_tlr);
 }
+
+void ease_rotateToHole(int hole, int min_tlr) {
+  ease_rotateToDeg(hole*angPerHole, min_tlr);
+}
+
+void ease_rotateByHole(int hole, int min_tlr) {
+  ease_rotateByDeg(hole*angPerHole, min_tlr);
+}

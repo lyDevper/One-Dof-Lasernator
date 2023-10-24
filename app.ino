@@ -18,6 +18,8 @@ void app() {  // To be called in void loop()
   Serial.println("\tbydegease <float> or bde <float>");
   Serial.println("\ttostepease <int> or tse <int>");
   Serial.println("\tbystepease <int> or bse <int>");
+  Serial.println("\ttoholeease <int> or the <int>");
+  Serial.println("\tbyholeease <int> or bhe <int>");
   Serial.println("\tsetdeg <float> or sd <float>");
   Serial.println("\tsetstep <int> or ss <int>");
   Serial.println("\tsettlr <int microsec> or st <int microsec>");
@@ -94,6 +96,18 @@ void app() {  // To be called in void loop()
     int para = Serial.parseInt();
     ease_stepBy(para, fast_delay_tlr);
   }
+  else if (cmd == "toholeease" || cmd == "the") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    int para = Serial.parseInt();
+    ease_rotateToHole(para, fast_delay_tlr);
+  }
+  else if (cmd == "byholeease" || cmd == "bhe") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    int para = Serial.parseInt();
+    ease_rotateByHole(para, fast_delay_tlr);
+  }
   else if (cmd == "setdeg" || cmd == "sd") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
@@ -120,7 +134,7 @@ void app() {  // To be called in void loop()
   }
   else if (cmd == "tolimsw" || cmd == "tl") {
     rotateToLimSw(homing_tlr);
-  }
+  } 
   else if (cmd == "laseron" || cmd == "ln") {
     laserOn();
   }
