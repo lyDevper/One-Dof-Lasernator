@@ -8,7 +8,7 @@ const int laserPin = 6;
 const float stepAng = 0.225;  // angle per step after considering gearing
 const float angPerHole = 5;
 
-const float degAtLim_noWeight = -2.4;
+const float degAtLim_noWeight = -2.4; // -2.7
 const float degAtLim_withWeight = -3.2;
 float degAtLim = degAtLim_noWeight; // deg position at limit switch for offsetting to 0 deg, must be calibrated -3.15
 

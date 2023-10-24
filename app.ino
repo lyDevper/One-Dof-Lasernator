@@ -15,6 +15,7 @@ void app() {  // To be called in void loop()
   Serial.println("\ttohole <int> or th <int>");
   Serial.println("\tbyhole <int> or bh <int>");
   Serial.println("\ttodegease <float> or tde <float>");
+  Serial.println("\tbydegease <float> or bde <float>");
   Serial.println("\ttostepease <int> or tse <int>");
   Serial.println("\tbystepease <int> or bse <int>");
   Serial.println("\tsetdeg <float> or sd <float>");
@@ -69,13 +70,19 @@ void app() {  // To be called in void loop()
     int para = Serial.parseInt();
     rotateByHole(para, delay_tlr);
   }
-  if (cmd == "todegease" || cmd == "tde") {
+  else if (cmd == "todegease" || cmd == "tde") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     float para = Serial.parseFloat();
     ease_rotateToDeg(para, fast_delay_tlr);
   }
-    else if (cmd == "tostepease" || cmd == "tse") {
+  else if (cmd == "bydegease" || cmd == "bde") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    float para = Serial.parseFloat();
+    ease_rotateByDeg(para, fast_delay_tlr);
+  }
+  else if (cmd == "tostepease" || cmd == "tse") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();

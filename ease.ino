@@ -5,8 +5,8 @@ void ease_stepBy(int steps, float min_tlr) {
     digitalWrite(dirPin, 0);
 
   int n = abs(steps);
-  float end_tlr = 10000;
-  float ease_times = min(round(0.12 * n), 40); //45
+  float end_tlr = 10000; // tlr at beginning and final
+  float ease_times = min(round(0.12 * n), 40); // duration to ease in and ease out
 
   if(n*stepAng < 15) {
     min_tlr = (min_tlr + end_tlr)/2;
@@ -21,15 +21,13 @@ void ease_stepBy(int steps, float min_tlr) {
   for (int i = 0; i < abs(steps); i++) {    
     float tlr;
     if (i < ease_times) {
-      tlr = map(i, 0, ease_times, end_tlr, min_tlr);
-      //tlr = end_tlr + (i/ease_times) * (min_tlr-end_tlr);
+      tlr = map(i, 0, ease_times, end_tlr, min_tlr); // ease in
     }
     else if (i < n-ease_times) {
-      tlr = min_tlr;
+      tlr = min_tlr; // constant v
     }
     else {
-      tlr = map(i-(n-ease_times), n-ease_times, n, min_tlr, end_tlr);
-      //tlr = min_tlr + ((i-(n-ease_times))/ease_times) * (end_tlr-min_tlr);
+      tlr = map(i-(n-ease_times), n-ease_times, n, min_tlr, end_tlr); // ease out
     }
 
     digitalWrite(stepPin, 1);
@@ -57,4 +55,8 @@ void ease_rotateToDeg(float degPos, int min_tlr) {  // rotate to an absolute pos
   Serial.print(" deg: ");
   Serial.println(getDegNow());
   Serial.println();
+}
+
+void ease_rotateByDeg(float deg, int min_tlr) {
+  ease_rotateToDeg(getDegNow() + deg, min_tlr);
 }
