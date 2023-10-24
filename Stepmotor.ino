@@ -8,7 +8,7 @@ const int laserPin = 6;
 const float stepAng = 0.225;  // angle per step after considering gearing
 const float angPerHole = 5;
 
-const float degAtLim_noWeight = -2.7;
+const float degAtLim_noWeight = -2.4;
 const float degAtLim_withWeight = -3.2;
 float degAtLim = degAtLim_noWeight; // deg position at limit switch for offsetting to 0 deg, must be calibrated -3.15
 
@@ -146,6 +146,7 @@ void bootLaser() {
 
 // ----------------------------------------------------------------------- //
 int delay_tlr = 8000;  //delay tolerance to use
+int fast_delay_tlr = 3000;
 void setup() {
   Serial.begin(9600);
   pinMode(stepPin, OUTPUT);
@@ -161,6 +162,7 @@ void setup() {
   Serial.println("setup started beep beep...");
   //testStepper();
   //testAccPres();
+  //test_fives();
 }
 
 void loop() {
@@ -168,20 +170,34 @@ void loop() {
 }
 
 void testAccPres() {
-  degAtLim = degAtLim_withWeight;
-  int pause_time = 7000;
+  //degAtLim = degAtLim_withWeight;
+  int pause_time = 4000;
   delay_tlr = 8000;
   laserOn();
+  laserOff();
   delay(4000);
   for(int i=0; i<25; i++) {
-    Serial.println(i);
+    Serial.println(i+1);
     homeToZero();
     delay(2000);
-    rotateToDeg(90, delay_tlr);
-    delay(pause_time);
+    //rotateToDeg(90, delay_tlr);
+    ease_rotateToDeg(90, fast_delay_tlr);
+    beamLaser(4000);
+    //delay(pause_time);
     //rotateToDeg(180, delay_tlr);
     //delay(pause_time);
   }
+}
+
+void test_fives() {
+  laserOn();
+  homeToZero();
+  delay(1000);
+  bootLaser();
+  for(int i=0; i<=135; i+=5) {
+    rotateToDeg(i, delay_tlr);
+    delay(1500);
+  }  
 }
 
 void testStepper() {

@@ -73,19 +73,19 @@ void app() {  // To be called in void loop()
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     float para = Serial.parseFloat();
-    ease_rotateToDeg(para, delay_tlr);
+    ease_rotateToDeg(para, fast_delay_tlr);
   }
     else if (cmd == "tostepease" || cmd == "tse") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();
-    ease_stepTo(para, delay_tlr);
+    ease_stepTo(para, fast_delay_tlr);
   }
   else if (cmd == "bystepease" || cmd == "bse") {
     Serial.println("Please enter parameter : ");
     waitForSerialInp();
     int para = Serial.parseInt();
-    ease_stepBy(para, delay_tlr);
+    ease_stepBy(para, fast_delay_tlr);
   }
   else if (cmd == "setdeg" || cmd == "sd") {
     Serial.println("Please enter parameter : ");

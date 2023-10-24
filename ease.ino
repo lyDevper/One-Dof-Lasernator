@@ -4,23 +4,33 @@ void ease_stepBy(int steps, float min_tlr) {
   else
     digitalWrite(dirPin, 0);
 
-  int end_tlr = 12000;
-  int ease_times = 30;
   int n = abs(steps);
+  float end_tlr = 10000;
+  float ease_times = min(round(0.12 * n), 40); //45
 
+  if(n*stepAng < 15) {
+    min_tlr = (min_tlr + end_tlr)/2;
+  }
+  /*
   if (n < 2*ease_times) {
-    stepBy(steps, min_tlr + end_tlr/2);
+    stepBy(steps, (min_tlr + end_tlr)/2);
     return;
   }
+  */
 
   for (int i = 0; i < abs(steps); i++) {    
-    int tlr;
-    if (i<ease_times)
-      tlr = end_tlr + (i/ease_times) * (min_tlr-end_tlr);
-    else if (i < n-ease_times)
+    float tlr;
+    if (i < ease_times) {
+      tlr = map(i, 0, ease_times, end_tlr, min_tlr);
+      //tlr = end_tlr + (i/ease_times) * (min_tlr-end_tlr);
+    }
+    else if (i < n-ease_times) {
       tlr = min_tlr;
-    else
-      tlr = end_tlr + ((i-(n-ease_times))/ease_times) * (min_tlr-end_tlr);
+    }
+    else {
+      tlr = map(i-(n-ease_times), n-ease_times, n, min_tlr, end_tlr);
+      //tlr = min_tlr + ((i-(n-ease_times))/ease_times) * (end_tlr-min_tlr);
+    }
 
     digitalWrite(stepPin, 1);
     delayMicroseconds(tlr);
