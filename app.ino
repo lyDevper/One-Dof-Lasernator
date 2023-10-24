@@ -14,6 +14,9 @@ void app() {  // To be called in void loop()
   Serial.println("\tbystep <int> or bs <int>");
   Serial.println("\ttohole <int> or th <int>");
   Serial.println("\tbyhole <int> or bh <int>");
+  Serial.println("\ttodegease <float> or tde <float>");
+  Serial.println("\ttostepease <int> or tse <int>");
+  Serial.println("\tbystepease <int> or bse <int>");
   Serial.println("\tsetdeg <float> or sd <float>");
   Serial.println("\tsetstep <int> or ss <int>");
   Serial.println("\tsettlr <int microsec> or st <int microsec>");
@@ -65,6 +68,24 @@ void app() {  // To be called in void loop()
     waitForSerialInp();
     int para = Serial.parseInt();
     rotateByHole(para, delay_tlr);
+  }
+  if (cmd == "todegease" || cmd == "tde") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    float para = Serial.parseFloat();
+    ease_rotateToDeg(para, delay_tlr);
+  }
+    else if (cmd == "tostepease" || cmd == "tse") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    int para = Serial.parseInt();
+    ease_stepTo(para, delay_tlr);
+  }
+  else if (cmd == "bystepease" || cmd == "bse") {
+    Serial.println("Please enter parameter : ");
+    waitForSerialInp();
+    int para = Serial.parseInt();
+    ease_stepBy(para, delay_tlr);
   }
   else if (cmd == "setdeg" || cmd == "sd") {
     Serial.println("Please enter parameter : ");
